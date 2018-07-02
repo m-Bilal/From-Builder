@@ -10,7 +10,7 @@
     <TextView
         android:id="@+id/question_textview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:textSize="24sp"
         android:text="Your question here"
         android:layout_marginBottom="12dp"/>

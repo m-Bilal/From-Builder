@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,8 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.bilal.formbuilder.R;
+import com.bilal.formbuilder.activity.MainActivity;
+import com.bilal.formbuilder.model.QuestionModel;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,7 +26,8 @@ public class RadioButtonFragment extends Fragment {
 
     TextView questionTextview;
     RecyclerView recyclerView;
-    MyRecyclerViewAdapter adapter
+    MyRecyclerViewAdapter adapter;
+    QuestionModel questionModel;
 
     public RadioButtonFragment() {
         // Required empty public constructor
@@ -35,6 +39,8 @@ public class RadioButtonFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_radio_button, container, false);
+        int pos = getArguments().getInt("pos");
+        questionModel = MainActivity.questionModelList.get(pos);
         questionTextview = v.findViewById(R.id.question_textview);
         recyclerView = v.findViewById(R.id.recyclerview);
         adapter = new MyRecyclerViewAdapter();
@@ -42,6 +48,8 @@ public class RadioButtonFragment extends Fragment {
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
+        questionTextview.setText(questionModel.text);
+        adapter.notifyDataSetChanged();
         return v;
     }
 
@@ -69,12 +77,12 @@ public class RadioButtonFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(MyViewHolder holder, int position) {
-            //holder.title.setText(movie.getTitle());
+            holder.textView.setText(questionModel.text);
         }
 
         @Override
         public int getItemCount() {
-            return 0;
+            return questionModel.choiceList.size();
         }
     }
 }
