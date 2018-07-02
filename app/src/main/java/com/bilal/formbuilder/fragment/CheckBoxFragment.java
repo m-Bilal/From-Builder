@@ -77,7 +77,7 @@ public class CheckBoxFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(MyViewHolder holder, int position) {
-            holder.textView.setText(questionModel.text);
+            holder.textView.setText(questionModel.choiceList.get(position));
         }
 
         @Override

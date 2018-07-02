@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="24dp"
     android:orientation="vertical"
     tools:context=".fragment.RadioButtonFragment">
 
@@ -13,12 +12,15 @@
         android:layout_height="wrap_content"
         android:textSize="24sp"
         android:text="Your question here"
+        android:layout_marginTop="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
         android:layout_marginBottom="12dp"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
     </android.support.v7.widget.RecyclerView>
 
 </LinearLayout>

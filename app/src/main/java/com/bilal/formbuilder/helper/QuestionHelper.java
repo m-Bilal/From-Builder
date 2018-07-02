@@ -24,7 +24,7 @@ public class QuestionHelper {
             questionModel.id = i;
             if (type == 0) {
                 questionModel.text = "This is question number " + (i+1)+ ". Select all options that are true";
-                int answers = (int)(Math.random()*((max-min)+1))+min;
+                int answers = (int)(Math.random()*((10-3)+1))+3;
                 for(int j = 0; j < answers; j++) {
                     questionModel.choiceList.add("Option " + (j+1));
                 }
@@ -32,7 +32,7 @@ public class QuestionHelper {
                 questionModel.text = "This is question number " + (i+1)+ ". Enter the correct answer";
             } else {
                 questionModel.text = "This is question number " + (i+1)+ ". Select the option that is true";
-                int answers = (int)(Math.random()*((max-min)+1))+min;
+                int answers = (int)(Math.random()*((10-3)+1))+3;
                 for(int j = 0; j < answers; j++) {
                     questionModel.choiceList.add("Option " + (j+1));
                 }
