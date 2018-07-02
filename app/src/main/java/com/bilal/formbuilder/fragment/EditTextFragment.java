@@ -1,6 +1,7 @@
 package com.bilal.formbuilder.fragment;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -10,6 +11,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -17,6 +20,8 @@ import android.widget.TextView;
 import com.bilal.formbuilder.R;
 import com.bilal.formbuilder.activity.MainActivity;
 import com.bilal.formbuilder.model.QuestionModel;
+
+import java.util.LinkedList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -26,8 +31,8 @@ public class EditTextFragment extends Fragment {
     private static final String TAG = "EditTextFrag";
 
     TextView questionTextview;
-    RecyclerView recyclerView;
-    MyRecyclerViewAdapter adapter;
+    Button button;
+    EditText editText;
     QuestionModel questionModel;
 
     public EditTextFragment() {
@@ -43,46 +48,27 @@ public class EditTextFragment extends Fragment {
         int pos = getArguments().getInt("pos");
         questionModel = MainActivity.questionModelList.get(pos);
         questionTextview = v.findViewById(R.id.question_textview);
-        recyclerView = v.findViewById(R.id.recyclerview);
-        adapter = new MyRecyclerViewAdapter();
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(adapter);
+        editText = v.findViewById(R.id.edittext);
+        button = v.findViewById(R.id.button);
         questionTextview.setText(questionModel.text);
-        adapter.notifyDataSetChanged();
-        return v;
-    }
-
-    public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAdapter.MyViewHolder> {
-
-        public class MyViewHolder extends RecyclerView.ViewHolder {
-            EditText editText;
-
-
-            public MyViewHolder(View view) {
-                super(view);
-                editText = view.findViewById(R.id.edittext);
+        try {
+            editText.setText(questionModel.selectedAnswerList.get(0));
+        } catch (Exception e) {
+            e.printStackTrace();
+            editText.setText("");
+        }
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                questionModel.selectedAnswerList = new LinkedList<>();
+                questionModel.selectedAnswerList.add(editText.getText().toString());
+                // hide virtual keyboard
+                InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(editText.getWindowToken(),
+                        InputMethodManager.RESULT_UNCHANGED_SHOWN);
             }
-        }
-
-        @Override
-        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.item_edittext, parent, false);
-
-            return new MyViewHolder(itemView);
-        }
-
-        @Override
-        public void onBindViewHolder(MyViewHolder holder, int position) {
-            //holder.title.setText(movie.getTitle());
-        }
-
-        @Override
-        public int getItemCount() {
-            return 1;
-        }
+        });
+        return v;
     }
 }
 

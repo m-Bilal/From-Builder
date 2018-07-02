@@ -7,15 +7,21 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.bilal.formbuilder.R;
 import com.bilal.formbuilder.activity.MainActivity;
 import com.bilal.formbuilder.model.QuestionModel;
+
+import java.util.LinkedList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -58,12 +64,37 @@ public class RadioButtonFragment extends Fragment {
         public class MyViewHolder extends RecyclerView.ViewHolder {
             TextView textView;
             RadioButton radioButton;
+            LinearLayout linearLayout;
 
 
             public MyViewHolder(View view) {
                 super(view);
                 textView = view.findViewById(R.id.textview);
                 radioButton = view.findViewById(R.id.radiobutton);
+                linearLayout = view.findViewById(R.id.linear_layout);
+                View.OnClickListener onClickListener = new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String answer = questionModel.choiceList.get(getAdapterPosition());
+                        if(radioButton.isChecked()) {
+                            removeAnswers();
+                        } else {
+                            removeAnswers();
+                            addAnswer(answer);
+                        }
+                        notifyDataSetChanged();
+                    }
+                };
+                linearLayout.setOnClickListener(onClickListener);
+                radioButton.setOnClickListener(onClickListener);
+            }
+
+            void addAnswer(String answer) {
+                questionModel.selectedAnswerList.add(answer);
+            }
+
+            void removeAnswers() {
+                questionModel.selectedAnswerList= new LinkedList<>();
             }
         }
 
@@ -76,8 +107,15 @@ public class RadioButtonFragment extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(MyViewHolder holder, int position) {
-            holder.textView.setText(questionModel.choiceList.get(position));
+        public void onBindViewHolder(final MyViewHolder holder, int position) {
+            final String answer = questionModel.choiceList.get(position);
+            holder.textView.setText(answer);
+            if (questionModel.selectedAnswerList.contains(answer)) {
+                holder.radioButton.setChecked(true);
+            } else {
+                holder.radioButton.setChecked(false);
+            }
+
         }
 
         @Override

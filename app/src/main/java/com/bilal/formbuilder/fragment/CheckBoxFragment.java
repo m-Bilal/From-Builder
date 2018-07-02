@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bilal.formbuilder.R;
@@ -58,12 +60,14 @@ public class CheckBoxFragment extends Fragment {
         public class MyViewHolder extends RecyclerView.ViewHolder {
             TextView textView;
             CheckBox checkBox;
+            LinearLayout linearLayout;
 
 
             public MyViewHolder(View view) {
                 super(view);
                 textView = view.findViewById(R.id.textview);
                 checkBox = view.findViewById(R.id.checkbox);
+                linearLayout = view.findViewById(R.id.linear_layout);
             }
         }
 
@@ -76,8 +80,44 @@ public class CheckBoxFragment extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(MyViewHolder holder, int position) {
-            holder.textView.setText(questionModel.choiceList.get(position));
+        public void onBindViewHolder(final MyViewHolder holder, int position) {
+            final String answer = questionModel.choiceList.get(position);
+            holder.textView.setText(answer);
+            if (questionModel.selectedAnswerList.contains(answer)) {
+                holder.checkBox.setChecked(true);
+            } else {
+                holder.checkBox.setChecked(false);
+            }
+            holder.linearLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(holder.checkBox.isChecked()) {
+                        holder.checkBox.setChecked(false);
+                        removeAnswer(answer);
+                    } else {
+                        holder.checkBox.setChecked(true);
+                        addAnswer(answer);
+                    }
+                }
+            });
+            holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    if(b) {
+                        addAnswer(answer);
+                    } else {
+                        removeAnswer(answer);
+                    }
+                }
+            });
+        }
+
+        void addAnswer(String answer) {
+            questionModel.selectedAnswerList.add(answer);
+        }
+
+        void removeAnswer(String answer) {
+            questionModel.selectedAnswerList.remove(answer);
         }
 
         @Override
